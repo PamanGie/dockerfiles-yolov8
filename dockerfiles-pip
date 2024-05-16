@@ -35,22 +35,16 @@ RUN wget https://nvidia.box.com/shared/static/mvdcltm9ewdy2d5nurkiqorofz1s53ww.w
 RUN python3 -m pip install --upgrade pip wheel
 RUN pip install onnxruntime_gpu-1.15.1-cp38-cp38-linux_aarch64.whl
 RUN pip install --no-cache tqdm matplotlib pyyaml psutil pandas onnx
+RUN pip install --no-cache -e ".[export]"
 
-# Install additional dependencies for speech recognition and Google Text-to-Speech
-RUN apt-get install -y portaudio19-dev
-RUN pip install SpeechRecognition google-cloud-texttospeech
+# Install SpeechRecognition library
+RUN pip install SpeechRecognition
 
 # Set environment variables
 ENV OMP_NUM_THREADS=1
 
 # Copy the yolov8 folder into the container
 COPY yolov8 /usr/src/ultralytics/yolov8
-
-# Copy Google Cloud credentials into the container
-COPY credentials.json /usr/src/ultralytics/credentials.json
-
-# Set Google Cloud credentials environment variable
-ENV GOOGLE_APPLICATION_CREDENTIALS=/usr/src/ultralytics/credentials.json
 
 # Usage Examples -------------------------------------------------------------------------------------------------------
 
